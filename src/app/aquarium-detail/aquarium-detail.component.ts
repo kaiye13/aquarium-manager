@@ -5,13 +5,15 @@ import { FormsModule } from '@angular/forms';
 import { Observable, map } from 'rxjs';
 import { Aquarium, Parameter } from '../models/aquarium.model';
 import { AquariumService } from '../services/aquarium.service';
+import { DaysSincePipe } from '../pipes/days-since.pipe';
+import { ParameterStatusPipe } from '../pipes/parameter-status.pipe';
 
 @Component({
   selector: 'app-aquarium-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, DaysSincePipe, ParameterStatusPipe],
   templateUrl: './aquarium-detail.component.html',
-  styleUrl: './aquarium-detail.component.scss'
+  styleUrls: ['./aquarium-detail.component.scss']
 })
 export class AquariumDetailComponent implements OnInit {
   aquarium$: Observable<Aquarium | undefined>;
@@ -34,10 +36,7 @@ export class AquariumDetailComponent implements OnInit {
     return param.currentValue >= param.targetMin && param.currentValue <= param.targetMax;
   }
 
-  getParameterStatusClass(param: Parameter): string {
-    if (this.isParameterInRange(param)) return 'success';
-    return 'danger';
-  }
+
 
   editParameter(param: Parameter): void {
     this.editingParameter = { ...param };
@@ -59,9 +58,42 @@ export class AquariumDetailComponent implements OnInit {
     this.editingParameter = null;
   }
 
-  getDaysSinceAdded(dateAdded: Date): number {
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - new Date(dateAdded).getTime());
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  addInhabitant(): void {
+    // For now, we'll add a simple dialog-like prompt
+    // In a real app, you might open a modal dialog or navigate to a form
+    const aquariumId = this.route.snapshot.params['id'];
+    
+    const name = prompt('Enter inhabitant name:');
+    if (!name) return;
+    
+    const species = prompt('Enter species:') || '';
+    const typeInput = prompt('Enter type (fish, invertebrate, plant, coral):') || 'fish';
+    const quantityInput = prompt('Enter quantity:') || '1';
+    
+    // Validate type
+    const validTypes = ['fish', 'invertebrate', 'plant', 'coral'];
+    const type = validTypes.includes(typeInput) ? typeInput as any : 'fish';
+    
+    const quantity = parseInt(quantityInput) || 1;
+    const notes = prompt('Enter notes (optional):') || '';
+
+    const newInhabitant = {
+      name,
+      species,
+      type,
+      quantity,
+      dateAdded: new Date(),
+      notes: notes || undefined
+    };
+
+    this.aquariumService.addInhabitant(aquariumId, newInhabitant);
+  }
+
+  trackByParameterId(index: number, param: Parameter): string {
+    return param.id;
+  }
+
+  trackByInhabitantId(index: number, inhabitant: any): string {
+    return inhabitant.id;
   }
 }

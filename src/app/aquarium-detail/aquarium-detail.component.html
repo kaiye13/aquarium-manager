@@ -22,9 +22,9 @@
       <div class="card-body">
         <div class="parameter-list">
           <div 
-            *ngFor="let param of aquarium.parameters" 
+            *ngFor="let param of aquarium.parameters; trackBy: trackByParameterId" 
             class="parameter-item"
-            [ngClass]="getParameterStatusClass(param)"
+            [ngClass]="param | parameterStatus"
           >
             <div class="parameter-info" *ngIf="editingParameter?.id !== param.id">
               <div class="parameter-name">{{ param.name }}</div>
@@ -44,28 +44,35 @@
               <div class="edit-form">
                 <div class="form-group">
                   <label>Current Value</label>
-                  <input 
-                    type="number" 
-                    [(ngModel)]="editingParameter!.currentValue"
-                    step="0.1"
-                  >
-                </div>
-                <div class="form-group">
-                  <label>Target Min</label>
-                  <input 
-                    type="number" 
-                    [(ngModel)]="editingParameter!.targetMin"
-                    step="0.1"
-                  >
-                </div>
-                <div class="form-group">
-                  <label>Target Max</label>
-                  <input 
-                    type="number" 
-                    [(ngModel)]="editingParameter!.targetMax"
-                    step="0.1"
-                  >
-                </div>
+                  <div class="form-group">
+                    <label for="currentValue">Current Value</label>
+                    <input 
+                      id="currentValue"
+                      name="currentValue"
+                      type="number" 
+                      [(ngModel)]="editingParameter!.currentValue"
+                      step="0.1"
+                      min="0"
+                      required
+                      [attr.aria-describedby]="editingParameter!.unit ? 'unit-' + editingParameter!.id : null"
+                    >
+                    <span id="unit-{{ editingParameter!.id }}" class="sr-only">{{ editingParameter!.unit }}</span>
+                  </div>
+                  <div class="form-group">
+                    <label>Target Min</label>
+                    <input 
+                      type="number" 
+                      [(ngModel)]="editingParameter!.targetMin"
+                      step="0.1"
+                    >
+                  </div>
+                  <div class="form-group">
+                    <label>Target Max</label>
+                    <input 
+                      type="number" 
+                      [(ngModel)]="editingParameter!.targetMax"
+                      step="0.1"
+                    >                </div>
                 <div class="form-actions">
                   <button class="btn btn-primary btn-small" (click)="saveParameter()">
                     Save
@@ -93,11 +100,11 @@
     <div class="card inhabitants-card">
       <div class="card-header">
         <h2>Inhabitants</h2>
-        <button class="btn btn-primary btn-small">Add Inhabitant</button>
+        <button class="btn btn-primary btn-small" (click)="addInhabitant()">Add Inhabitant</button>
       </div>
       <div class="card-body">
         <div class="inhabitant-list" *ngIf="aquarium.inhabitants.length > 0; else noInhabitants">
-          <div *ngFor="let inhabitant of aquarium.inhabitants" class="inhabitant-item">
+          <div *ngFor="let inhabitant of aquarium.inhabitants; trackBy: trackByInhabitantId" class="inhabitant-item">
             <div class="inhabitant-info">
               <h4>{{ inhabitant.name }}</h4>
               <p class="species">{{ inhabitant.species }}</p>
@@ -107,7 +114,7 @@
                 </span>
                 <span class="quantity">Qty: {{ inhabitant.quantity }}</span>
                 <span class="days-in-tank">
-                  {{ getDaysSinceAdded(inhabitant.dateAdded) }} days in tank
+                  {{ inhabitant.dateAdded | daysSince }} days in tank
                 </span>
               </div>
               <p class="notes" *ngIf="inhabitant.notes">{{ inhabitant.notes }}</p>
@@ -118,7 +125,7 @@
         <ng-template #noInhabitants>
           <div class="empty-state">
             <p>No inhabitants added yet</p>
-            <button class="btn btn-primary">Add Your First Inhabitant</button>
+            <button class="btn btn-primary" (click)="addInhabitant()">Add Your First Inhabitant</button>
           </div>
         </ng-template>
       </div>

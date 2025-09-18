@@ -1,6 +1,8 @@
+@import '../../styles/variables';
+
 .aquarium-list-container {
-  padding: 2rem;
-  max-width: 1200px;
+  padding: var(--spacing-lg);
+  max-width: var(--max-width-page);
   margin: 0 auto;
 }
 
@@ -8,10 +10,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-lg);
 
   h1 {
-    color: #2c3e50;
+    color: var(--text-primary);
     font-size: 2.5rem;
     margin: 0;
   }
@@ -25,26 +27,36 @@
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+
+  // Apply transitions only for users who prefer motion
+  @media (prefers-reduced-motion: no-preference) {
+    transition: all 0.2s ease;
+  }
+
+  &:focus {
+    outline: 2px solid $brand-blue;
+    outline-offset: 2px;
+  }
 
   &.btn-primary {
-    background-color: #3498db;
+    background-color: $brand-blue;
     color: white;
 
     &:hover {
-      background-color: #2980b9;
-      transform: translateY(-1px);
+      background-color: $brand-blue-dark;
+      @media (prefers-reduced-motion: no-preference) {
+        transform: translateY(-1px);
+      }
     }
   }
 
   &.btn-large {
-    padding: 1rem 2rem;
+    padding: var(--spacing-md) var(--spacing-lg);
     font-size: 1.1rem;
   }
 }
-
 .aquarium-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -54,39 +66,27 @@
 .aquarium-card {
   background: white;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px $card-shadow-light;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s ease;
   text-decoration: none;
   color: inherit;
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  }
-}
+  // Apply transitions only for users who prefer motion
+  @media (prefers-reduced-motion: no-preference) {
+    transition: all 0.3s ease;
 
-.card-header {
-  padding: 1.5rem 1.5rem 1rem;
-  border-bottom: 1px solid #ecf0f1;
-
-  h3 {
-    margin: 0 0 0.5rem 0;
-    color: #2c3e50;
-    font-size: 1.3rem;
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px $card-shadow-hover;
+    }
   }
 
-  .aquarium-type {
-    background-color: #e8f4fd;
-    color: #2980b9;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-  }
-}
-
+  // Static hover effects for users who prefer reduced motion
+  @media (prefers-reduced-motion: reduce) {
+    &:hover {
+      box-shadow: 0 6px 12px $card-shadow-hover;
+    }
 .card-body {
   padding: 1rem 1.5rem;
 
@@ -115,26 +115,36 @@
       color: #7f8c8d;
       font-weight: 500;
     }
+  }
 
-    .status-indicator {
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
+  .status-indicator {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
 
       &.success {
-        background-color: #d5edda;
-        color: #155724;
+        background-color: $success-bg;
+        color: $success-text;
+        &::before {
+          content: '✓ ';
+        }
       }
 
       &.warning {
-        background-color: #fff3cd;
-        color: #856404;
+        background-color: $warning-bg;
+        color: $warning-text;
+        &::before {
+          content: '⚠ ';
+        }
       }
 
       &.danger {
-        background-color: #f8d7da;
-        color: #721c24;
+        background-color: $danger-bg;
+        color: $danger-text;
+         &::before {
+          content: '✗ ';
+        }
       }
     }
   }
@@ -142,37 +152,37 @@
 
 .card-footer {
   padding: 1rem 1.5rem;
-  background-color: #f8f9fa;
-  border-top: 1px solid #ecf0f1;
+  background-color: $bg-light;
+  border-top: 1px solid $border-light;
 
   .text-muted {
-    color: #6c757d;
+    color: $text-muted;
     font-size: 0.85rem;
   }
 }
 
 .empty-state {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: var(--spacing-2xl) var(--spacing-lg);
 
   .empty-content {
     max-width: 400px;
     margin: 0 auto;
 
     h2 {
-      color: #2c3e50;
-      margin-bottom: 1rem;
+      color: $text-primary;
+      margin-bottom: var(--spacing-md);
     }
 
     p {
-      color: #7f8c8d;
-      margin-bottom: 2rem;
+      color: $text-secondary;
+      margin-bottom: var(--spacing-lg);
       line-height: 1.6;
     }
   }
 }
 
-.icon-plus::before {
-  content: '+';
-  font-size: 1.2rem;
+.icon-plus {
+  margin-right: var(--spacing-sm);
+  vertical-align: text-top;
 }

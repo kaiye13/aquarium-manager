@@ -5,7 +5,8 @@ import { AquariumDetailComponent } from './aquarium-detail/aquarium-detail.compo
 export const routes: Routes = [
   { path: '', redirectTo: 'aquariums', pathMatch: 'full' },
   { path: 'aquariums', component: AquariumListComponent },
-  { path: 'aquarium/:id', component: AquariumDetailComponent },
+  { path: 'aquariums', component: AquariumListComponent },
   { path: 'aquarium/new', component: AquariumDetailComponent, data: { mode: 'create' } },
-  { path: '**', redirectTo: 'aquariums' }
+  { path: 'aquarium/:id', component: AquariumDetailComponent },
+  { path: '**', redirectTo: 'aquariums' }  { path: '**', redirectTo: 'aquariums' }
 ];

@@ -38,4 +38,8 @@ export class AquariumListComponent implements OnInit {
     if (percentage >= 80) return 'warning';
     return 'danger';
   }
+
+  trackByAquariumId(index: number, aquarium: Aquarium): string {
+    return aquarium.id;
+  }
 }

@@ -1,0 +1,33 @@
+// SCSS Variables for Aquarium Manager
+// Design tokens for consistent theming across the application
+
+// Primary brand colors
+$text-primary: #2c3e50;
+$text-secondary: #7f8c8d;
+$text-muted: #6c757d;
+$brand-blue: #3498db;
+$brand-blue-dark: #2980b9;
+$brand-blue-light: #e8f4fd;
+
+// Background colors
+$bg-light: #f8f9fa;
+$bg-white: #ffffff;
+$border-light: #ecf0f1;
+
+// Status colors
+$success-bg: #d5edda;
+$success-text: #155724;
+$success-border: #c3e6cb;
+$warning-bg: #fff3cd;
+$warning-text: #856404;
+$danger-bg: #f8d7da;
+$danger-text: #721c24;
+$danger-border: #f5c6cb;
+
+// Additional colors
+$gray-light: #95a5a6;
+$gray-medium: #ddd;
+
+// Shadow values
+$card-shadow-light: rgba(0, 0, 0, 0.1);
+$card-shadow-hover: rgba(0, 0, 0, 0.15);
