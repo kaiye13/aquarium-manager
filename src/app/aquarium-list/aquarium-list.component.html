@@ -1,24 +1,5 @@
 <main class="aquarium-list-container" role="main">
-  <header class=  <section 
-    class="empty-state" 
-    role="region" 
-    aria-labelledby="empty-state-heading"
-    *ngIf="(aquariums$ | async)?.length === 0"
-  >
-    <div class="empty-content">
-      <h2 id="empty-state-heading">No Aquariums Yet</h2>
-      <p>Start by adding your first aquarium to track parameters and inhabitants.</p>
-      <button 
-        class="btn btn-primary btn-large" 
-        routerLink="/aquarium/new"
-        aria-describedby="empty-state-desc"
-      >
-        Add Your First Aquarium
-      </button>
-      <span id="empty-state-desc" class="sr-only">Create your first aquarium to get started</span>
-    </div>
-  </section>
-</main>
+  <header class="header">
     <h1>My Aquariums</h1>
     <button 
       class="btn btn-primary" 
@@ -37,7 +18,7 @@
     class="aquarium-grid" 
     role="grid" 
     aria-label="Aquariums list"
-    *ngIf="aquariums$ | async as aquariums"
+    *ngIf="aquariums$ | async as aquariums; else emptyState"
   >
     <article 
       *ngFor="let aquarium of aquariums; trackBy: trackByAquariumId" 
@@ -82,16 +63,27 @@
           Created: {{ aquarium.dateCreated | date:'shortDate' }}
         </small>
       </div>
-    </div>
+    </article>
   </div>
 
-  <div class="empty-state" *ngIf="(aquariums$ | async)?.length === 0">
-    <div class="empty-content">
-      <h2>No Aquariums Yet</h2>
-      <p>Start by adding your first aquarium to track parameters and inhabitants.</p>
-      <button class="btn btn-primary btn-large" routerLink="/aquarium/new">
-        Add Your First Aquarium
-      </button>
-    </div>
-  </div>
-</div>
+  <ng-template #emptyState>
+    <section 
+      class="empty-state" 
+      role="region" 
+      aria-labelledby="empty-state-heading"
+    >
+      <div class="empty-content">
+        <h2 id="empty-state-heading">No Aquariums Yet</h2>
+        <p>Start by adding your first aquarium to track parameters and inhabitants.</p>
+        <button 
+          class="btn btn-primary btn-large" 
+          routerLink="/aquarium/new"
+          aria-describedby="empty-state-desc"
+        >
+          Add Your First Aquarium
+        </button>
+        <span id="empty-state-desc" class="sr-only">Create your first aquarium to get started</span>
+      </div>
+    </section>
+  </ng-template>
+</main>

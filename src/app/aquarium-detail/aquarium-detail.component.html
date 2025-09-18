@@ -55,16 +55,8 @@
                       [attr.aria-describedby]="editingParameter!.unit ? 'unit-' + editingParameter!.id : null"
                   >
                   <span id="unit-{{ editingParameter!.id }}" class="sr-only">{{ editingParameter!.unit }}</span>
-                </div>                      name="currentValue"
-                      type="number" 
-                      [(ngModel)]="editingParameter!.currentValue"
-                      step="0.1"
-                      min="0"
-                      required
-                      [attr.aria-describedby]="editingParameter!.unit ? 'unit-' + editingParameter!.id : null"
-                    >
-                    <span id="unit-{{ editingParameter!.id }}" class="sr-only">{{ editingParameter!.unit }}</span>
-                </div>                  <div class="form-group">
+                </div>
+                <div class="form-group">
                     <label>Target Min</label>
                     <input 
                       type="number" 
@@ -78,7 +70,8 @@
                       type="number" 
                       [(ngModel)]="editingParameter!.targetMax"
                       step="0.1"
-                    >                </div>
+                    >
+                  </div>
                 <div class="form-actions">
                   <button class="btn btn-primary btn-small" (click)="saveParameter()">
                     Save
@@ -139,15 +132,14 @@
   </div>
 
   <!-- Notes Section -->
-  <div class="card notes-card" *ngIf="aquarium.notes">
+  <div class="card notes-card" *ngIf="(aquarium$ | async)?.notes as notes">
     <div class="card-header">
       <h2>Notes</h2>
     </div>
     <div class="card-body">
-      <p>{{ aquarium.notes }}</p>
+      <p>{{ notes }}</p>
     </div>
   </div>
-</div>
 
 <div class="not-found" *ngIf="!(aquarium$ | async)">
   <h2>Aquarium Not Found</h2>
