@@ -43,11 +43,19 @@
             <div class="parameter-edit" *ngIf="editingParameter?.id === param.id">
               <div class="edit-form">
                 <div class="form-group">
-                <div class="form-group">
-                    <label for="currentValue">Current Value</label>
-                    <input 
+                  <label for="currentValue">Current Value</label>
+                  <input
                       id="currentValue"
                       name="currentValue"
+                      type="number"
+                      [(ngModel)]="editingParameter!.currentValue"
+                      step="0.1"
+                      min="0"
+                      required
+                      [attr.aria-describedby]="editingParameter!.unit ? 'unit-' + editingParameter!.id : null"
+                  >
+                  <span id="unit-{{ editingParameter!.id }}" class="sr-only">{{ editingParameter!.unit }}</span>
+                </div>                      name="currentValue"
                       type="number" 
                       [(ngModel)]="editingParameter!.currentValue"
                       step="0.1"

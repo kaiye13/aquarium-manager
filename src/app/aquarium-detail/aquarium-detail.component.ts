@@ -7,21 +7,24 @@ import { Aquarium, Parameter } from '../models/aquarium.model';
 import { AquariumService } from '../services/aquarium.service';
 import { DaysSincePipe } from '../pipes/days-since.pipe';
 import { ParameterStatusPipe } from '../pipes/parameter-status.pipe';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-aquarium-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, DaysSincePipe, ParameterStatusPipe],
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, DaysSincePipe, ParameterStatusPipe],
   templateUrl: './aquarium-detail.component.html',
   styleUrls: ['./aquarium-detail.component.scss']
 })
 export class AquariumDetailComponent implements OnInit {
   aquarium$: Observable<Aquarium | undefined>;
   editingParameter: Parameter | null = null;
-
   constructor(
     private route: ActivatedRoute,
-    private aquariumService: AquariumService
+    private aquariumService: AquariumService,
+    private fb: FormBuilder
   ) {
     // Get aquarium by ID from route parameters
     const aquariumId = this.route.snapshot.params['id'];
@@ -57,6 +60,10 @@ export class AquariumDetailComponent implements OnInit {
   cancelEdit(): void {
     this.editingParameter = null;
   }
+
+  openAddInhabitantModal(): void {
+  // Open modal with reactive form
+}
 
   addInhabitant(): void {
     // TODO: Replace with proper modal dialog or form component
