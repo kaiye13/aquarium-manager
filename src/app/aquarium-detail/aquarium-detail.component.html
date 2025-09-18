@@ -1,0 +1,145 @@
+<div class="aquarium-detail-container" *ngIf="aquarium$ | async as aquarium">
+  <div class="header">
+    <div class="header-content">
+      <button class="btn btn-secondary" routerLink="/aquariums">
+        ← Back to Aquariums
+      </button>
+      <div class="aquarium-info">
+        <h1>{{ aquarium.name }}</h1>
+        <span class="aquarium-meta">
+          {{ aquarium.type | titlecase }} • {{ aquarium.capacity }}L
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <!-- Parameters Section -->
+    <div class="card parameters-card">
+      <div class="card-header">
+        <h2>Water Parameters</h2>
+      </div>
+      <div class="card-body">
+        <div class="parameter-list">
+          <div 
+            *ngFor="let param of aquarium.parameters" 
+            class="parameter-item"
+            [ngClass]="getParameterStatusClass(param)"
+          >
+            <div class="parameter-info" *ngIf="editingParameter?.id !== param.id">
+              <div class="parameter-name">{{ param.name }}</div>
+              <div class="parameter-values">
+                <span class="current-value">{{ param.currentValue }}{{ param.unit }}</span>
+                <span class="target-range">
+                  Target: {{ param.targetMin }} - {{ param.targetMax }}{{ param.unit }}
+                </span>
+              </div>
+              <button class="btn btn-small btn-outline" (click)="editParameter(param)">
+                Edit
+              </button>
+            </div>
+
+            <!-- Edit Form -->
+            <div class="parameter-edit" *ngIf="editingParameter?.id === param.id">
+              <div class="edit-form">
+                <div class="form-group">
+                  <label>Current Value</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="editingParameter.currentValue"
+                    step="0.1"
+                  >
+                </div>
+                <div class="form-group">
+                  <label>Target Min</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="editingParameter.targetMin"
+                    step="0.1"
+                  >
+                </div>
+                <div class="form-group">
+                  <label>Target Max</label>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="editingParameter.targetMax"
+                    step="0.1"
+                  >
+                </div>
+                <div class="form-actions">
+                  <button class="btn btn-primary btn-small" (click)="saveParameter()">
+                    Save
+                  </button>
+                  <button class="btn btn-secondary btn-small" (click)="cancelEdit()">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="parameter-status">
+              <span *ngIf="isParameterInRange(param)" class="status-good">✓ In Range</span>
+              <span *ngIf="!isParameterInRange(param)" class="status-alert">⚠ Out of Range</span>
+              <small class="last-updated">
+                Updated: {{ param.lastUpdated | date:'short' }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inhabitants Section -->
+    <div class="card inhabitants-card">
+      <div class="card-header">
+        <h2>Inhabitants</h2>
+        <button class="btn btn-primary btn-small">Add Inhabitant</button>
+      </div>
+      <div class="card-body">
+        <div class="inhabitant-list" *ngIf="aquarium.inhabitants.length > 0; else noInhabitants">
+          <div *ngFor="let inhabitant of aquarium.inhabitants" class="inhabitant-item">
+            <div class="inhabitant-info">
+              <h4>{{ inhabitant.name }}</h4>
+              <p class="species">{{ inhabitant.species }}</p>
+              <div class="inhabitant-details">
+                <span class="type-badge" [ngClass]="'type-' + inhabitant.type">
+                  {{ inhabitant.type | titlecase }}
+                </span>
+                <span class="quantity">Qty: {{ inhabitant.quantity }}</span>
+                <span class="days-in-tank">
+                  {{ getDaysSinceAdded(inhabitant.dateAdded) }} days in tank
+                </span>
+              </div>
+              <p class="notes" *ngIf="inhabitant.notes">{{ inhabitant.notes }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <ng-template #noInhabitants>
+          <div class="empty-state">
+            <p>No inhabitants added yet</p>
+            <button class="btn btn-primary">Add Your First Inhabitant</button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes Section -->
+  <div class="card notes-card" *ngIf="aquarium.notes">
+    <div class="card-header">
+      <h2>Notes</h2>
+    </div>
+    <div class="card-body">
+      <p>{{ aquarium.notes }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="not-found" *ngIf="!(aquarium$ | async)">
+  <h2>Aquarium Not Found</h2>
+  <p>The aquarium you're looking for doesn't exist.</p>
+  <button class="btn btn-primary" routerLink="/aquariums">
+    Back to Aquariums
+  </button>
+</div>

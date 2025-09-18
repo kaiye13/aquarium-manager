@@ -1,0 +1,57 @@
+<div class="aquarium-list-container">
+  <div class="header">
+    <h1>My Aquariums</h1>
+    <button class="btn btn-primary" routerLink="/aquarium/new">
+      <i class="icon-plus"></i>
+      Add New Aquarium
+    </button>
+  </div>
+
+  <div class="aquarium-grid" *ngIf="aquariums$ | async as aquariums">
+    <div 
+      *ngFor="let aquarium of aquariums" 
+      class="aquarium-card"
+      [routerLink]="['/aquarium', aquarium.id]"
+    >
+      <div class="card-header">
+        <h3>{{ aquarium.name }}</h3>
+        <span class="aquarium-type">{{ aquarium.type | titlecase }}</span>
+      </div>
+      
+      <div class="card-body">
+        <div class="info-row">
+          <span class="label">Capacity:</span>
+          <span class="value">{{ aquarium.capacity }}L</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="label">Inhabitants:</span>
+          <span class="value">{{ aquarium.inhabitants.length }} species</span>
+        </div>
+        
+        <div class="parameters-status">
+          <span class="label">Parameters:</span>
+          <div class="status-indicator" [ngClass]="getStatusColor(aquarium)">
+            {{ getParameterStatus(aquarium).inRange }}/{{ getParameterStatus(aquarium).total }} in range
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-footer">
+        <small class="text-muted">
+          Created: {{ aquarium.dateCreated | date:'shortDate' }}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="(aquariums$ | async)?.length === 0">
+    <div class="empty-content">
+      <h2>No Aquariums Yet</h2>
+      <p>Start by adding your first aquarium to track parameters and inhabitants.</p>
+      <button class="btn btn-primary btn-large" routerLink="/aquarium/new">
+        Add Your First Aquarium
+      </button>
+    </div>
+  </div>
+</div>
