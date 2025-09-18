@@ -59,36 +59,42 @@ export class AquariumDetailComponent implements OnInit {
   }
 
   addInhabitant(): void {
-    // For now, we'll add a simple dialog-like prompt
-    // In a real app, you might open a modal dialog or navigate to a form
+    // TODO: Replace with proper modal dialog or form component
+    // This is a temporary implementation
     const aquariumId = this.route.snapshot.params['id'];
     
     const name = prompt('Enter inhabitant name:');
-    if (!name) return;
+    if (!name?.trim()) return;
     
     const species = prompt('Enter species:') || '';
     const typeInput = prompt('Enter type (fish, invertebrate, plant, coral):') || 'fish';
     const quantityInput = prompt('Enter quantity:') || '1';
     
-    // Validate type
-    const validTypes = ['fish', 'invertebrate', 'plant', 'coral'];
-    const type = validTypes.includes(typeInput) ? typeInput as any : 'fish';
+    // Validate type with proper typing
+    const validTypes = ['fish', 'invertebrate', 'plant', 'coral'] as const;
+    type ValidType = typeof validTypes[number];
+    const type: ValidType = validTypes.includes(typeInput as ValidType) ? typeInput as ValidType : 'fish';
     
-    const quantity = parseInt(quantityInput) || 1;
+    const quantity = Math.max(1, parseInt(quantityInput) || 1);
     const notes = prompt('Enter notes (optional):') || '';
 
     const newInhabitant = {
-      name,
-      species,
+      name: name.trim(),
+      species: species.trim(),
       type,
       quantity,
       dateAdded: new Date(),
-      notes: notes || undefined
+      notes: notes?.trim() || undefined
     };
 
-    this.aquariumService.addInhabitant(aquariumId, newInhabitant);
+    try {
+      this.aquariumService.addInhabitant(aquariumId, newInhabitant);
+      // TODO: Add success feedback to user
+    } catch (error) {
+      console.error('Failed to add inhabitant:', error);
+      // TODO: Add error feedback to user
+    }
   }
-
   trackByParameterId(index: number, param: Parameter): string {
     return param.id;
   }
