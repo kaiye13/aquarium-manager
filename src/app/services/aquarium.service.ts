@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Aquarium, Parameter, Inhabitant } from '../models/aquarium.model';
 
 @Injectable({
@@ -74,17 +75,15 @@ export class AquariumService {
   }
 
   getAquarium(id: string): Observable<Aquarium | undefined> {
-    return new Observable(observer => {
-      this.aquariums$.subscribe(aquariums => {
-        observer.next(aquariums.find(a => a.id === id));
-      });
-    });
+    return this.aquariums$.pipe(
+      map(aquariums => aquariums.find(a => a.id === id))
+    );
   }
 
   addAquarium(aquarium: Omit<Aquarium, 'id'>): void {
     const newAquarium: Aquarium = {
       ...aquarium,
-      id: Date.now().toString()
+      id: crypto.randomUUID()
     };
     
     const currentAquariums = this.aquariumsSubject.value;
@@ -122,7 +121,7 @@ export class AquariumService {
   addInhabitant(aquariumId: string, inhabitant: Omit<Inhabitant, 'id'>): void {
     const newInhabitant: Inhabitant = {
       ...inhabitant,
-      id: Date.now().toString()
+      id: crypto.randomUUID()
     };
 
     const currentAquariums = this.aquariumsSubject.value;

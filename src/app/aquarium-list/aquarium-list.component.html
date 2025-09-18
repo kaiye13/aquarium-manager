@@ -29,12 +29,14 @@
           <span class="value">{{ aquarium.inhabitants.length }} species</span>
         </div>
         
-        <div class="parameters-status">
-          <span class="label">Parameters:</span>
-          <div class="status-indicator" [ngClass]="getStatusColor(aquarium)">
-            {{ getParameterStatus(aquarium).inRange }}/{{ getParameterStatus(aquarium).total }} in range
+        <ng-container *ngIf="getParameterStatus(aquarium) as paramStatus">
+          <div class="parameters-status">
+            <span class="label">Parameters:</span>
+            <div class="status-indicator" [ngClass]="getStatusColor(aquarium)">
+              {{ paramStatus.inRange }}/{{ paramStatus.total }} in range
+            </div>
           </div>
-        </div>
+        </ng-container>
       </div>
       
       <div class="card-footer">
