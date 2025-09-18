@@ -1,0 +1,89 @@
+<main class="aquarium-list-container" role="main">
+  <header class="header">
+    <h1>My Aquariums</h1>
+    <button 
+      class="btn btn-primary" 
+      routerLink="/aquarium/new"
+      aria-describedby="add-aquarium-desc"
+    >
+      <svg class="icon-plus" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+      </svg>
+      Add New Aquarium
+    </button>
+    <span id="add-aquarium-desc" class="sr-only">Navigate to create a new aquarium</span>
+  </header>
+
+  <div 
+    class="aquarium-grid" 
+    role="grid" 
+    aria-label="Aquariums list"
+    *ngIf="aquariums$ | async as aquariums; else emptyState"
+  >
+    <article 
+      *ngFor="let aquarium of aquariums; trackBy: trackByAquariumId" 
+      class="aquarium-card"
+      role="gridcell"
+      [routerLink]="['/aquarium', aquarium.id]"
+      [attr.aria-label]="'Aquarium: ' + aquarium.name + ', Type: ' + aquarium.type + ', Capacity: ' + aquarium.capacity + 'L, ' + aquarium.inhabitants.length + ' species'"
+      tabindex="0"
+    >
+      <div class="card-header">
+        <h3>{{ aquarium.name }}</h3>
+        <span class="aquarium-type">{{ aquarium.type | titlecase }}</span>
+      </div>
+      
+      <div class="card-body">
+        <div class="info-row">
+          <span class="label">Capacity:</span>
+          <span class="value">{{ aquarium.capacity }}L</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="label">Inhabitants:</span>
+          <span class="value">{{ aquarium.inhabitants.length }} species</span>
+        </div>
+        
+        <ng-container *ngIf="getParameterStatus(aquarium) as paramStatus">
+          <div class="parameters-status" role="status" aria-live="polite">
+            <span class="label">Parameters:</span>
+            <div 
+              class="status-indicator" 
+              [ngClass]="getStatusColor(aquarium)"
+              [attr.aria-label]="paramStatus.inRange + ' out of ' + paramStatus.total + ' parameters are within target range'"
+            >
+              {{ paramStatus.inRange }}/{{ paramStatus.total }} in range
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      
+      <div class="card-footer">
+        <small class="text-muted">
+          Created: {{ aquarium.dateCreated | date:'shortDate' }}
+        </small>
+      </div>
+    </article>
+  </div>
+
+  <ng-template #emptyState>
+    <section 
+      class="empty-state" 
+      role="region" 
+      aria-labelledby="empty-state-heading"
+    >
+      <div class="empty-content">
+        <h2 id="empty-state-heading">No Aquariums Yet</h2>
+        <p>Start by adding your first aquarium to track parameters and inhabitants.</p>
+        <button 
+          class="btn btn-primary btn-large" 
+          routerLink="/aquarium/new"
+          aria-describedby="empty-state-desc"
+        >
+          Add Your First Aquarium
+        </button>
+        <span id="empty-state-desc" class="sr-only">Create your first aquarium to get started</span>
+      </div>
+    </section>
+  </ng-template>
+</main>

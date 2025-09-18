@@ -1,0 +1,290 @@
+@use '../../styles/variables' as *;
+
+.aquarium-list-container {
+  padding: 2rem 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 2rem 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+  }
+}
+
+.btn {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  // Apply transitions only for users who prefer motion
+  @media (prefers-reduced-motion: no-preference) {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &:focus {
+    outline: 2px solid rgba(102, 126, 234, 0.5);
+    outline-offset: 2px;
+  }
+
+  &.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+
+    &:hover {
+      box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+      @media (prefers-reduced-motion: no-preference) {
+        transform: translateY(-2px) scale(1.02);
+      }
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      @media (prefers-reduced-motion: no-preference) {
+        transition: left 0.5s ease;
+      }
+    }
+
+    &:hover::before {
+      left: 100%;
+    }
+  }
+
+  &.btn-large {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.1rem;
+    border-radius: 20px;
+  }
+}
+.aquarium-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 420px));
+  gap: 2rem;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.aquarium-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  // Apply transitions only for users who prefer motion
+  @media (prefers-reduced-motion: no-preference) {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+      border-color: rgba(102, 126, 234, 0.3);
+    }
+  }
+
+  // Static hover effects for users who prefer reduced motion
+  @media (prefers-reduced-motion: reduce) {
+    &:hover {
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+      border-color: rgba(102, 126, 234, 0.3);
+    }
+  }
+}
+
+.card-header {
+  padding: 2rem 2rem 1rem;
+  border-bottom: 1px solid rgba(236, 240, 241, 0.5);
+
+  h3 {
+    margin: 0 0 0.75rem 0;
+    color: $text-primary;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .aquarium-type {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.card-body {
+  padding: 1.5rem 2rem;
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: rgba(248, 250, 252, 0.8);
+    border-radius: 12px;
+    border-left: 3px solid rgba(102, 126, 234, 0.3);
+
+    .label {
+      color: $text-secondary;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .value {
+      color: $text-primary;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+  }
+
+  .parameters-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+
+    .label {
+      color: $text-secondary;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+  }
+
+  .status-indicator {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+
+    &.success {
+      background: linear-gradient(135deg, #00c851 0%, #00ff88 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(0, 200, 81, 0.3);
+      &::before {
+        content: '✓ ';
+      }
+    }
+
+    &.warning {
+      background: linear-gradient(135deg, #ffbb33 0%, #ffcc02 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 187, 51, 0.3);
+      &::before {
+        content: '⚠ ';
+      }
+    }
+
+    &.danger {
+      background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);
+      &::before {
+        content: '✗ ';
+      }
+    }
+  }
+}
+
+.card-footer {
+  padding: 1.5rem 2rem;
+  background: rgba(248, 250, 252, 0.5);
+  border-top: 1px solid rgba(236, 240, 241, 0.3);
+
+  .text-muted {
+    color: $text-muted;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 24px;
+  border: 2px dashed rgba(102, 126, 234, 0.3);
+  margin: 2rem 0;
+
+  .empty-content {
+    max-width: 500px;
+    margin: 0 auto;
+
+    h2 {
+      color: $text-primary;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    p {
+      color: $text-secondary;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+  }
+}
+
+.icon-plus {
+  margin-right: 0.5rem;
+  vertical-align: text-top;
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
+}
