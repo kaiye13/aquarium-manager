@@ -1,8 +1,6 @@
 @use '../../styles/variables' as *;
 
 .aquarium-list-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f8faff 0%, #e6f3ff 50%, #f0f8ff 100%);
   padding: 2rem 1rem;
   max-width: 1400px;
   margin: 0 auto;
