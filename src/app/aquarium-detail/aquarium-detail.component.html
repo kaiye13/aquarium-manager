@@ -46,7 +46,7 @@
                   <label>Current Value</label>
                   <input 
                     type="number" 
-                    [(ngModel)]="editingParameter.currentValue"
+                    [(ngModel)]="editingParameter!.currentValue"
                     step="0.1"
                   >
                 </div>
@@ -54,7 +54,7 @@
                   <label>Target Min</label>
                   <input 
                     type="number" 
-                    [(ngModel)]="editingParameter.targetMin"
+                    [(ngModel)]="editingParameter!.targetMin"
                     step="0.1"
                   >
                 </div>
@@ -62,7 +62,7 @@
                   <label>Target Max</label>
                   <input 
                     type="number" 
-                    [(ngModel)]="editingParameter.targetMax"
+                    [(ngModel)]="editingParameter!.targetMax"
                     step="0.1"
                   >
                 </div>
