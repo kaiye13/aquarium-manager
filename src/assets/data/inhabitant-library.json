@@ -1,0 +1,191 @@
+[
+  {
+    "name": "Neon Tetra",
+    "species": "Paracheirodon innesi",
+    "type": "fish",
+    "habitat": "freshwater",
+    "notes": "Peaceful schooling fish, keep in groups of 6+"
+  },
+  {
+    "name": "Betta Fish",
+    "species": "Betta splendens",
+    "type": "fish",
+    "habitat": "freshwater",
+    "notes": "Solitary fish, needs warm water 24-28°C"
+  },
+  {
+    "name": "Guppy",
+    "species": "Poecilia reticulata",
+    "type": "fish",
+    "habitat": "freshwater",
+    "notes": "Easy to breed, colorful, peaceful community fish"
+  },
+  {
+    "name": "Angelfish",
+    "species": "Pterophyllum scalare",
+    "type": "fish",
+    "habitat": "freshwater",
+    "notes": "Semi-aggressive, needs tall tank, pairs well"
+  },
+  {
+    "name": "Corydoras Catfish",
+    "species": "Corydoras paleatus",
+    "type": "fish",
+    "habitat": "freshwater",
+    "notes": "Bottom dweller, peaceful, keep in groups"
+  },
+  {
+    "name": "Pleco",
+    "species": "Hypostomus plecostomus",
+    "type": "fish",
+    "habitat": "freshwater",
+    "notes": "Algae eater, can grow large, nocturnal"
+  },
+  {
+    "name": "Molly",
+    "species": "Poecilia sphenops",
+    "type": "fish",
+    "habitat": "brackish",
+    "notes": "Hardy, peaceful, can adapt to brackish water"
+  },
+  {
+    "name": "Swordtail",
+    "species": "Xiphophorus hellerii",
+    "type": "fish",
+    "habitat": "freshwater",
+    "notes": "Active swimmer, peaceful, easy to breed"
+  },
+  {
+    "name": "Clownfish",
+    "species": "Amphiprion ocellatus",
+    "type": "fish",
+    "habitat": "saltwater",
+    "notes": "Symbiotic with anemones, hardy marine fish"
+  },
+  {
+    "name": "Blue Tang",
+    "species": "Paracanthurus hepatus",
+    "type": "fish",
+    "habitat": "saltwater",
+    "notes": "Active swimmer, needs large tank, reef safe"
+  },
+  {
+    "name": "Yellow Tang",
+    "species": "Zebrasoma flavescens",
+    "type": "fish",
+    "habitat": "saltwater",
+    "notes": "Herbivorous, territorial, bright yellow coloration"
+  },
+  {
+    "name": "Mandarin Fish",
+    "species": "Synchiropus splendidus",
+    "type": "fish",
+    "habitat": "saltwater",
+    "notes": "Requires established tank with copepods"
+  },
+  {
+    "name": "Java Moss",
+    "species": "Taxiphyllum barbieri",
+    "type": "plant",
+    "habitat": "freshwater",
+    "notes": "Easy care, low light, good for beginners"
+  },
+  {
+    "name": "Anubias",
+    "species": "Anubias barteri",
+    "type": "plant",
+    "habitat": "freshwater",
+    "notes": "Low light, attach to rocks/wood, slow growing"
+  },
+  {
+    "name": "Amazon Sword",
+    "species": "Echinodorus amazonicus",
+    "type": "plant",
+    "habitat": "freshwater",
+    "notes": "Background plant, needs root tabs, moderate light"
+  },
+  {
+    "name": "Java Fern",
+    "species": "Microsorum pteropus",
+    "type": "plant",
+    "habitat": "freshwater",
+    "notes": "Hardy, low light, attach to hardscape"
+  },
+  {
+    "name": "Hornwort",
+    "species": "Ceratophyllum demersum",
+    "type": "plant",
+    "habitat": "freshwater",
+    "notes": "Fast growing, floating or planted, nutrient absorber"
+  },
+  {
+    "name": "Cryptocoryne",
+    "species": "Cryptocoryne wendtii",
+    "type": "plant",
+    "habitat": "freshwater",
+    "notes": "Foreground plant, low light, melts initially"
+  },
+  {
+    "name": "Cherry Shrimp",
+    "species": "Neocaridina davidi",
+    "type": "invertebrate",
+    "habitat": "freshwater",
+    "notes": "Algae eater, breeds easily, peaceful"
+  },
+  {
+    "name": "Amano Shrimp",
+    "species": "Caridina multidentata",
+    "type": "invertebrate",
+    "habitat": "freshwater",
+    "notes": "Excellent algae eater, larger than cherry shrimp"
+  },
+  {
+    "name": "Mystery Snail",
+    "species": "Pomacea bridgesii",
+    "type": "invertebrate",
+    "habitat": "freshwater",
+    "notes": "Algae eater, colorful, lays eggs above water"
+  },
+  {
+    "name": "Hermit Crab",
+    "species": "Calcinus elegans",
+    "type": "invertebrate",
+    "habitat": "saltwater",
+    "notes": "Scavenger, needs shells for growth, saltwater"
+  },
+  {
+    "name": "Cleaner Shrimp",
+    "species": "Lysmata amboinensis",
+    "type": "invertebrate",
+    "habitat": "saltwater",
+    "notes": "Cleans fish, reef safe, saltwater only"
+  },
+  {
+    "name": "Green Star Polyp",
+    "species": "Briareum violacea",
+    "type": "coral",
+    "habitat": "saltwater",
+    "notes": "Easy coral, fast growing, low to moderate light"
+  },
+  {
+    "name": "Mushroom Coral",
+    "species": "Discosoma sp.",
+    "type": "coral",
+    "habitat": "saltwater",
+    "notes": "Beginner coral, low light, various colors"
+  },
+  {
+    "name": "Zoa Polyps",
+    "species": "Zoanthus sp.",
+    "type": "coral",
+    "habitat": "saltwater",
+    "notes": "Colorful, moderate care, can be toxic"
+  },
+  {
+    "name": "Hammer Coral",
+    "species": "Euphyllia ancora",
+    "type": "coral",
+    "habitat": "saltwater",
+    "notes": "LPS coral, moderate light, needs feeding"
+  }
+]

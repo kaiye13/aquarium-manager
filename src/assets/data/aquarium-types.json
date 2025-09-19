@@ -1,0 +1,26 @@
+[
+  {
+    "value": "freshwater",
+    "label": "Freshwater",
+    "emoji": "🐠",
+    "description": "Perfect for beginners and tropical fish"
+  },
+  {
+    "value": "saltwater",
+    "label": "Saltwater",
+    "emoji": "🌊",
+    "description": "Marine environment for oceanic species"
+  },
+  {
+    "value": "brackish",
+    "label": "Brackish",
+    "emoji": "🦐",
+    "description": "Mix of fresh and saltwater species"
+  },
+  {
+    "value": "reef",
+    "label": "Reef",
+    "emoji": "🐙",
+    "description": "Advanced setup for corals and marine life"
+  }
+]

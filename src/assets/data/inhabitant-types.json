@@ -1,0 +1,22 @@
+[
+  {
+    "value": "fish",
+    "label": "Fish",
+    "emoji": "🐠"
+  },
+  {
+    "value": "invertebrate",
+    "label": "Invertebrate",
+    "emoji": "🦐"
+  },
+  {
+    "value": "plant",
+    "label": "Plant",
+    "emoji": "🌱"
+  },
+  {
+    "value": "coral",
+    "label": "Coral",
+    "emoji": "🪸"
+  }
+]

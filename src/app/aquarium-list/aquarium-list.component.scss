@@ -1,8 +1,8 @@
 @use '../../styles/variables' as *;
 
 .aquarium-list-container {
-  padding: 2rem 1rem;
-  max-width: 1400px;
+  padding: 1.5rem 1rem;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -10,17 +10,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  padding: 2rem 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem 2rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
 
   h1 {
-    font-size: 3.5rem;
-    font-weight: 800;
+    font-size: 2.5rem;
+    font-weight: 700;
     margin: 0;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;
@@ -31,11 +31,11 @@
 }
 
 .btn {
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 16px;
+  border-radius: 12px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.9rem;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -92,11 +92,11 @@
 }
 .aquarium-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 420px));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 380px));
+  gap: 1.5rem;
   justify-content: center;
   width: 100%;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .aquarium-card {
@@ -143,7 +143,7 @@
 }
 
 .card-header {
-  padding: 2rem 2rem 1rem;
+  padding: 1.5rem 1.5rem 1rem;
   border-bottom: 1px solid rgba(236, 240, 241, 0.5);
 
   h3 {
@@ -166,7 +166,7 @@
 }
 
 .card-body {
-  padding: 1.5rem 2rem;
+  padding: 1.25rem 1.5rem;
 
   .info-row {
     display: flex;
@@ -240,7 +240,7 @@
 }
 
 .card-footer {
-  padding: 1.5rem 2rem;
+  padding: 1rem 1.5rem;
   background: rgba(248, 250, 252, 0.5);
   border-top: 1px solid rgba(236, 240, 241, 0.3);
 

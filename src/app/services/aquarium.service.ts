@@ -83,11 +83,12 @@ export class AquariumService {
   addAquarium(aquarium: Omit<Aquarium, 'id'>): void {
     const newAquarium: Aquarium = {
       ...aquarium,
-      id: crypto.randomUUID()
+      id: this.generateId()
     };
     
     const currentAquariums = this.aquariumsSubject.value;
-    this.aquariumsSubject.next([...currentAquariums, newAquarium]);
+    const updatedAquariums = [...currentAquariums, newAquarium];
+    this.aquariumsSubject.next(updatedAquariums);
   }
 
   updateAquarium(id: string, updates: Partial<Aquarium>): void {
@@ -118,10 +119,18 @@ export class AquariumService {
     this.aquariumsSubject.next(updatedAquariums);
   }
 
+  private generateId(): string {
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+    // Fallback for environments without crypto.randomUUID
+    return 'item-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 11) + '-' + Math.random().toString(36).substring(2, 6);
+  }
+
   addInhabitant(aquariumId: string, inhabitant: Omit<Inhabitant, 'id'>): void {
     const newInhabitant: Inhabitant = {
       ...inhabitant,
-      id: crypto.randomUUID()
+      id: this.generateId()
     };
 
     const currentAquariums = this.aquariumsSubject.value;
