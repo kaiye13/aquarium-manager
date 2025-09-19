@@ -127,8 +127,7 @@ export class AquariumDataService {
   /**
    * Get filtered inhabitants with type, habitat, and search filters
    */
-  getFilteredInhabitants(searchTerm: string = '', type: string = '', habitat: string = ''): Observable<InhabitantLibraryItem[]> {
-    return this.getInhabitantLibrary().pipe(
+  getFilteredInhabitants(searchTerm: string = '', type: string = '', habitat: 'freshwater' | 'saltwater' | 'brackish' | '' = ''): Observable<InhabitantLibraryItem[]> {    return this.getInhabitantLibrary().pipe(
       map((inhabitants: InhabitantLibraryItem[]) => {
         let filtered = [...inhabitants];
 
