@@ -81,23 +81,14 @@ export class AquariumService {
   }
 
   addAquarium(aquarium: Omit<Aquarium, 'id'>): void {
-    console.log('AquariumService.addAquarium called with:', aquarium);
-    
     const newAquarium: Aquarium = {
       ...aquarium,
       id: this.generateId()
     };
     
-    console.log('Generated new aquarium with ID:', newAquarium);
-    
     const currentAquariums = this.aquariumsSubject.value;
-    console.log('Current aquariums before adding:', currentAquariums);
-    
     const updatedAquariums = [...currentAquariums, newAquarium];
     this.aquariumsSubject.next(updatedAquariums);
-    
-    console.log('Updated aquariums after adding:', updatedAquariums);
-    console.log('BehaviorSubject value after update:', this.aquariumsSubject.value);
   }
 
   updateAquarium(id: string, updates: Partial<Aquarium>): void {
@@ -133,7 +124,7 @@ export class AquariumService {
       return crypto.randomUUID();
     }
     // Fallback for environments without crypto.randomUUID
-    return 'item-' + Date.now().toString(36) + '-' + Math.random().toString(36).substr(2, 9);
+    return 'item-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 11) + '-' + Math.random().toString(36).substring(2, 6);
   }
 
   addInhabitant(aquariumId: string, inhabitant: Omit<Inhabitant, 'id'>): void {

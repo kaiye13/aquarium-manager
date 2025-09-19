@@ -41,7 +41,7 @@
         >
           <span class="step-number">{{ step }}</span>
           <span class="step-label">
-            {{ step === 1 ? 'Name' : step === 2 ? 'Type' : step === 3 ? 'Capacity' : 'Inhabitants' }}
+            {{ getStepLabel(step) }}
           </span>
         </div>
       </div>
@@ -162,7 +162,7 @@
               <div 
                 *ngFor="let inhabitant of inhabitants.controls; let i = index" 
                 class="inhabitant-item"
-                [formGroup]="$any(inhabitant)"
+                [formGroup]="inhabitant"
               >
                 <div class="inhabitant-header">
                   <h4>Inhabitant {{ i + 1 }}</h4>
@@ -398,7 +398,7 @@
         >
           <span *ngIf="!isSubmitting">🎯 Create Aquarium</span>
           <span *ngIf="isSubmitting" class="loading-state">
-            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24">
+            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" opacity="0.3"/>
               <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2" fill="none"/>
             </svg>

@@ -1,9 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AquariumService } from '../services/aquarium.service';
+import { AquariumDataService, AquariumType, InhabitantType, InhabitantLibraryItem } from '../services/aquarium-data.service';
 import { Aquarium, Inhabitant } from '../models/aquarium.model';
+
+interface InhabitantFormGroup extends FormGroup {
+  value: {
+    name: string;
+    species: string;
+    type: string;
+    quantity: number;
+    notes: string;
+  };
+  controls: {
+    name: FormControl<string>;
+    species: FormControl<string>;
+    type: FormControl<string>;
+    quantity: FormControl<number>;
+    notes: FormControl<string>;
+  };
+}
 
 @Component({
   selector: 'app-aquarium-new',
@@ -24,64 +42,16 @@ export class AquariumNewComponent implements OnInit {
   libraryFilter = '';
   selectedLibraryType: string = '';
 
-  aquariumTypes = [
-    { value: 'freshwater', label: 'Freshwater', emoji: '🐠', description: 'Perfect for beginners and tropical fish' },
-    { value: 'saltwater', label: 'Saltwater', emoji: '🌊', description: 'Marine environment for oceanic species' },
-    { value: 'brackish', label: 'Brackish', emoji: '🦐', description: 'Mix of fresh and saltwater species' },
-    { value: 'reef', label: 'Reef', emoji: '🐙', description: 'Advanced setup for corals and marine life' }
-  ];
-
-  commonCapacities = [10, 20, 40, 55, 75, 100, 125, 150, 200, 300];
-
-  inhabitantTypes = [
-    { value: 'fish', label: 'Fish', emoji: '🐠' },
-    { value: 'invertebrate', label: 'Invertebrate', emoji: '🦐' },
-    { value: 'plant', label: 'Plant', emoji: '🌱' },
-    { value: 'coral', label: 'Coral', emoji: '🪸' }
-  ];
-
-  inhabitantLibrary = [
-    // Popular Freshwater Fish
-    { name: 'Neon Tetra', species: 'Paracheirodon innesi', type: 'fish', notes: 'Peaceful schooling fish, keep in groups of 6+' },
-    { name: 'Betta Fish', species: 'Betta splendens', type: 'fish', notes: 'Solitary fish, needs warm water 24-28°C' },
-    { name: 'Guppy', species: 'Poecilia reticulata', type: 'fish', notes: 'Easy to breed, colorful, peaceful community fish' },
-    { name: 'Angelfish', species: 'Pterophyllum scalare', type: 'fish', notes: 'Semi-aggressive, needs tall tank, pairs well' },
-    { name: 'Corydoras Catfish', species: 'Corydoras paleatus', type: 'fish', notes: 'Bottom dweller, peaceful, keep in groups' },
-    { name: 'Pleco', species: 'Hypostomus plecostomus', type: 'fish', notes: 'Algae eater, can grow large, nocturnal' },
-    { name: 'Molly', species: 'Poecilia sphenops', type: 'fish', notes: 'Hardy, peaceful, can adapt to brackish water' },
-    { name: 'Swordtail', species: 'Xiphophorus hellerii', type: 'fish', notes: 'Active swimmer, peaceful, easy to breed' },
-    
-    // Saltwater Fish
-    { name: 'Clownfish', species: 'Amphiprion ocellatus', type: 'fish', notes: 'Symbiotic with anemones, hardy marine fish' },
-    { name: 'Blue Tang', species: 'Paracanthurus hepatus', type: 'fish', notes: 'Active swimmer, needs large tank, reef safe' },
-    { name: 'Yellow Tang', species: 'Zebrasoma flavescens', type: 'fish', notes: 'Herbivorous, territorial, bright yellow coloration' },
-    { name: 'Mandarin Fish', species: 'Synchiropus splendidus', type: 'fish', notes: 'Requires established tank with copepods' },
-    
-    // Plants
-    { name: 'Java Moss', species: 'Taxiphyllum barbieri', type: 'plant', notes: 'Easy care, low light, good for beginners' },
-    { name: 'Anubias', species: 'Anubias barteri', type: 'plant', notes: 'Low light, attach to rocks/wood, slow growing' },
-    { name: 'Amazon Sword', species: 'Echinodorus amazonicus', type: 'plant', notes: 'Background plant, needs root tabs, moderate light' },
-    { name: 'Java Fern', species: 'Microsorum pteropus', type: 'plant', notes: 'Hardy, low light, attach to hardscape' },
-    { name: 'Hornwort', species: 'Ceratophyllum demersum', type: 'plant', notes: 'Fast growing, floating or planted, nutrient absorber' },
-    { name: 'Cryptocoryne', species: 'Cryptocoryne wendtii', type: 'plant', notes: 'Foreground plant, low light, melts initially' },
-    
-    // Invertebrates
-    { name: 'Cherry Shrimp', species: 'Neocaridina davidi', type: 'invertebrate', notes: 'Algae eater, breeds easily, peaceful' },
-    { name: 'Amano Shrimp', species: 'Caridina multidentata', type: 'invertebrate', notes: 'Excellent algae eater, larger than cherry shrimp' },
-    { name: 'Mystery Snail', species: 'Pomacea bridgesii', type: 'invertebrate', notes: 'Algae eater, colorful, lays eggs above water' },
-    { name: 'Hermit Crab', species: 'Calcinus elegans', type: 'invertebrate', notes: 'Scavenger, needs shells for growth, saltwater' },
-    { name: 'Cleaner Shrimp', species: 'Lysmata amboinensis', type: 'invertebrate', notes: 'Cleans fish, reef safe, saltwater only' },
-    
-    // Corals
-    { name: 'Green Star Polyp', species: 'Briareum violacea', type: 'coral', notes: 'Easy coral, fast growing, low to moderate light' },
-    { name: 'Mushroom Coral', species: 'Discosoma sp.', type: 'coral', notes: 'Beginner coral, low light, various colors' },
-    { name: 'Zoa Polyps', species: 'Zoanthus sp.', type: 'coral', notes: 'Colorful, moderate care, can be toxic' },
-    { name: 'Hammer Coral', species: 'Euphyllia ancora', type: 'coral', notes: 'LPS coral, moderate light, needs feeding' }
-  ];
+  // Data properties from service
+  aquariumTypes: AquariumType[] = [];
+  commonCapacities: number[] = [];
+  inhabitantTypes: InhabitantType[] = [];
+  inhabitantLibrary: InhabitantLibraryItem[] = [];
 
   constructor(
     private fb: FormBuilder,
     private aquariumService: AquariumService,
+    private aquariumDataService: AquariumDataService,
     private router: Router
   ) {
     this.aquariumForm = this.fb.group({
@@ -93,24 +63,41 @@ export class AquariumNewComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Initialize data from service (async loading from JSON files)
+    this.aquariumDataService.getAquariumTypes().subscribe(types => {
+      this.aquariumTypes = types;
+    });
+
+    this.aquariumDataService.getCommonCapacities().subscribe(capacities => {
+      this.commonCapacities = capacities;
+    });
+
+    this.aquariumDataService.getInhabitantTypes().subscribe(types => {
+      this.inhabitantTypes = types;
+    });
+
+    this.aquariumDataService.getInhabitantLibrary().subscribe(library => {
+      this.inhabitantLibrary = library;
+    });
+  }
 
   get progressPercentage(): number {
     return (this.currentStep / this.totalSteps) * 100;
   }
 
-  get inhabitants(): FormArray {
-    return this.aquariumForm.get('inhabitants') as FormArray;
+  get inhabitants(): FormArray<InhabitantFormGroup> {
+    return this.aquariumForm.get('inhabitants') as FormArray<InhabitantFormGroup>;
   }
 
-  createInhabitantForm(): FormGroup {
+  createInhabitantForm(): InhabitantFormGroup {
     return this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
-      species: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100)]],
-      type: ['fish', Validators.required],
-      quantity: [1, [Validators.required, Validators.min(1), Validators.max(1000)]],
-      notes: ['', Validators.maxLength(200)]
-    });
+      name: this.fb.control('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]),
+      species: this.fb.control('', [Validators.required, Validators.minLength(1), Validators.maxLength(100)]),
+      type: this.fb.control('fish', [Validators.required]),
+      quantity: this.fb.control(1, [Validators.required, Validators.min(1), Validators.max(1000)]),
+      notes: this.fb.control('', [Validators.maxLength(200)])
+    }) as InhabitantFormGroup;
   }
 
   addInhabitant(): void {
@@ -144,12 +131,12 @@ export class AquariumNewComponent implements OnInit {
 
   addInhabitantFromLibrary(libraryItem: any): void {
     const inhabitantForm = this.fb.group({
-      name: [libraryItem.name, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
-      species: [libraryItem.species, [Validators.required, Validators.minLength(1), Validators.maxLength(100)]],
-      type: [libraryItem.type, Validators.required],
-      quantity: [1, [Validators.required, Validators.min(1), Validators.max(1000)]],
-      notes: [libraryItem.notes || '', Validators.maxLength(200)]
-    });
+      name: this.fb.control(libraryItem.name, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]),
+      species: this.fb.control(libraryItem.species, [Validators.required, Validators.minLength(1), Validators.maxLength(100)]),
+      type: this.fb.control(libraryItem.type, [Validators.required]),
+      quantity: this.fb.control(1, [Validators.required, Validators.min(1), Validators.max(1000)]),
+      notes: this.fb.control(libraryItem.notes || '', [Validators.maxLength(200)])
+    }) as InhabitantFormGroup;
     
     this.inhabitants.push(inhabitantForm);
   }
@@ -212,22 +199,13 @@ export class AquariumNewComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    console.log('onSubmit called');
-    console.log('Current step:', this.currentStep);
-    console.log('Total steps:', this.totalSteps);
-    console.log('Form valid:', this.aquariumForm.valid);
-    console.log('Is submitting:', this.isSubmitting);
-    console.log('Form value:', this.aquariumForm.value);
-    
     // Only submit on the final step
     if (this.currentStep !== this.totalSteps) {
-      console.log('Not on final step, preventing submission');
       return;
     }
     
     if (this.aquariumForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
-      console.log('Starting submission process');
 
       const formValue = this.aquariumForm.value;
       
@@ -252,24 +230,15 @@ export class AquariumNewComponent implements OnInit {
         notes: formValue.notes?.trim() || undefined
       };
 
-      console.log('New aquarium object to be added:', newAquarium);
-
       try {
-        // Simulate API call delay for better UX
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        console.log('About to call aquariumService.addAquarium');
-        this.aquariumService.addAquarium(newAquarium);
-        console.log('Called aquariumService.addAquarium successfully');
-        
-        // Add a visible alert for debugging
-        alert('Aquarium has been added to the service!');
-        
+        // Replace simulated delay with the real service call (await in case it's async)
+        await this.aquariumService.addAquarium(newAquarium);
+
         this.showSuccess = true;
+        this.isSubmitting = false;
         
         // Navigate to aquarium list after success animation
         setTimeout(() => {
-          console.log('Navigating to /aquariums');
           this.router.navigate(['/aquariums']);
         }, 2000);
         
@@ -278,13 +247,12 @@ export class AquariumNewComponent implements OnInit {
         this.isSubmitting = false;
       }
     } else {
-      console.log('Form validation failed or already submitting');
+      // Surface validation errors in the UI
       if (!this.aquariumForm.valid) {
-        console.log('Form errors:', this.aquariumForm.errors);
         Object.keys(this.aquariumForm.controls).forEach(key => {
           const control = this.aquariumForm.get(key);
-          if (control && control.invalid) {
-            console.log(`${key} errors:`, control.errors);
+          if (control) {
+            control.markAsTouched();
           }
         });
       }
@@ -292,11 +260,7 @@ export class AquariumNewComponent implements OnInit {
   }
 
   private generateId(): string {
-    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-      return crypto.randomUUID();
-    }
-    // Fallback for environments without crypto.randomUUID
-    return 'param-' + Date.now().toString(36) + '-' + Math.random().toString(36).substr(2, 9);
+    return Math.random().toString(36).substr(2, 9);
   }
 
   private getDefaultParameters(type: string) {
@@ -304,9 +268,9 @@ export class AquariumNewComponent implements OnInit {
       {
         id: this.generateId(),
         name: 'pH',
-        currentValue: type === 'saltwater' || type === 'reef' ? 8.2 : 7.0,
-        targetMin: type === 'saltwater' || type === 'reef' ? 8.0 : 6.8,
-        targetMax: type === 'saltwater' || type === 'reef' ? 8.4 : 7.4,
+        currentValue: type === 'saltwater' || type === 'reef' ? 8.1 : 7.0,
+        targetMin: type === 'saltwater' || type === 'reef' ? 7.8 : 6.5,
+        targetMax: type === 'saltwater' || type === 'reef' ? 8.4 : 7.5,
         unit: '',
         lastUpdated: new Date()
       },
@@ -343,6 +307,16 @@ export class AquariumNewComponent implements OnInit {
     }
 
     return baseParameters;
+  }
+
+  getStepLabel(step: number): string {
+    switch (step) {
+      case 1: return 'Name';
+      case 2: return 'Type';
+      case 3: return 'Capacity';
+      case 4: return 'Inhabitants';
+      default: return '';
+    }
   }
 
   goBack(): void {
