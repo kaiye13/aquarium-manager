@@ -41,6 +41,7 @@ export class AquariumNewComponent implements OnInit {
   addMode: 'library' | 'custom' = 'library';
   libraryFilter = '';
   selectedLibraryType: string = '';
+  selectedLibraryHabitat: string = '';
 
   // Data properties from service
   aquariumTypes: AquariumType[] = [];
@@ -116,6 +117,11 @@ export class AquariumNewComponent implements OnInit {
       filtered = filtered.filter(item => item.type === this.selectedLibraryType);
     }
     
+    // Filter by habitat if selected
+    if (this.selectedLibraryHabitat) {
+      filtered = filtered.filter(item => item.habitat === this.selectedLibraryHabitat);
+    }
+    
     // Filter by search term
     if (this.libraryFilter.trim()) {
       const search = this.libraryFilter.toLowerCase();
@@ -148,6 +154,7 @@ export class AquariumNewComponent implements OnInit {
   clearLibraryFilters(): void {
     this.libraryFilter = '';
     this.selectedLibraryType = '';
+    this.selectedLibraryHabitat = '';
   }
 
   getInhabitantEmoji(type: string): string {
@@ -163,6 +170,11 @@ export class AquariumNewComponent implements OnInit {
   onTypeFilterChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     this.selectedLibraryType = target.value;
+  }
+
+  onHabitatFilterChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    this.selectedLibraryHabitat = target.value;
   }
 
   nextStep(): void {

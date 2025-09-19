@@ -1050,3 +1050,38 @@ display: flex
     }
   }
 }
+
+// Habitat filter and badges
+.habitat-filter {
+  min-width: 120px;
+}
+
+.item-habitat {
+  margin: 0.25rem 0;
+}
+
+.habitat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+
+  &.habitat-freshwater {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: #059669;
+  }
+
+  &.habitat-saltwater {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #2563eb;
+  }
+
+  &.habitat-brackish {
+    background-color: rgba(168, 85, 247, 0.1);
+    color: #7c3aed;
+  }
+}

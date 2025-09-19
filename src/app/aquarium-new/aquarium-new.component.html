@@ -303,11 +303,21 @@
                         {{ type.emoji }} {{ type.label }}
                       </option>
                     </select>
+                    <select 
+                      [value]="selectedLibraryHabitat"
+                      (change)="onHabitatFilterChange($event)"
+                      class="habitat-filter"
+                    >
+                      <option value="">All Habitats</option>
+                      <option value="freshwater">🌿 Freshwater</option>
+                      <option value="saltwater">🌊 Saltwater</option>
+                      <option value="brackish">💧 Brackish</option>
+                    </select>
                     <button 
                       type="button" 
                       class="clear-filters-btn"
                       (click)="clearLibraryFilters()"
-                      *ngIf="libraryFilter || selectedLibraryType"
+                      *ngIf="libraryFilter || selectedLibraryType || selectedLibraryHabitat"
                     >
                       Clear
                     </button>
@@ -326,6 +336,12 @@
                       <span class="item-name">{{ item.name }}</span>
                     </div>
                     <div class="item-species">{{ item.species }}</div>
+                    <div class="item-habitat">
+                      <span class="habitat-badge habitat-{{ item.habitat }}">
+                        {{ item.habitat === 'freshwater' ? '🌿' : item.habitat === 'saltwater' ? '🌊' : '💧' }}
+                        {{ item.habitat }}
+                      </span>
+                    </div>
                     <div class="item-notes">{{ item.notes }}</div>
                     <div class="add-overlay">
                       <span class="add-text">Click to Add</span>

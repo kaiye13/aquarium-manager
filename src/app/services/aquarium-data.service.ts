@@ -20,6 +20,7 @@ export interface InhabitantLibraryItem {
   name: string;
   species: string;
   type: string;
+  habitat: 'freshwater' | 'saltwater' | 'brackish';
   notes: string;
 }
 
@@ -113,9 +114,20 @@ export class AquariumDataService {
   }
 
   /**
-   * Get filtered inhabitants with both type and search filters
+   * Get inhabitants filtered by habitat
    */
-  getFilteredInhabitants(searchTerm: string = '', type: string = ''): Observable<InhabitantLibraryItem[]> {
+  getInhabitantsByHabitat(habitat: 'freshwater' | 'saltwater' | 'brackish'): Observable<InhabitantLibraryItem[]> {
+    return this.getInhabitantLibrary().pipe(
+      map((inhabitants: InhabitantLibraryItem[]) => 
+        inhabitants.filter(item => item.habitat === habitat)
+      )
+    );
+  }
+
+  /**
+   * Get filtered inhabitants with type, habitat, and search filters
+   */
+  getFilteredInhabitants(searchTerm: string = '', type: string = '', habitat: string = ''): Observable<InhabitantLibraryItem[]> {
     return this.getInhabitantLibrary().pipe(
       map((inhabitants: InhabitantLibraryItem[]) => {
         let filtered = [...inhabitants];
@@ -123,6 +135,11 @@ export class AquariumDataService {
         // Filter by type if specified
         if (type) {
           filtered = filtered.filter(item => item.type === type);
+        }
+
+        // Filter by habitat if specified
+        if (habitat) {
+          filtered = filtered.filter(item => item.habitat === habitat);
         }
 
         // Filter by search term if specified
