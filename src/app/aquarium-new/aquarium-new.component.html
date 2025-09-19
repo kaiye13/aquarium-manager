@@ -1,0 +1,193 @@
+<div class="aquarium-new-container">
+  <!-- Success Modal -->
+  <div class="success-modal" *ngIf="showSuccess">
+    <div class="success-content">
+      <div class="success-icon">
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+          <circle cx="60" cy="60" r="50" stroke="#00c851" stroke-width="4" fill="none" opacity="0.2"/>
+          <path d="M35 60l15 15 30-30" stroke="#00c851" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2>🎉 Aquarium Created Successfully!</h2>
+      <p>Your new aquarium is ready to go. Redirecting you back...</p>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="form-header">
+    <button class="btn-back" (click)="goBack()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.42-1.41L7.83 13H20v-2z"/>
+      </svg>
+      Back to Aquariums
+    </button>
+    
+    <div class="header-content">
+      <h1>Create New Aquarium</h1>
+      <p>Set up your new aquatic environment in just a few simple steps</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+      </div>
+      <div class="step-indicators">
+        <div 
+          *ngFor="let step of [1, 2, 3]; index as i" 
+          class="step-indicator"
+          [class.active]="currentStep === step"
+          [class.completed]="currentStep > step"
+        >
+          <span class="step-number">{{ step }}</span>
+          <span class="step-label">
+            {{ step === 1 ? 'Name' : step === 2 ? 'Type' : 'Capacity' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Container -->
+  <div class="form-container">
+    <form [formGroup]="aquariumForm" (ngSubmit)="onSubmit()">
+      
+      <!-- Step 1: Aquarium Name -->
+      <div class="form-step" *ngIf="currentStep === 1">
+        <div class="step-content">
+          <div class="step-icon">🐠</div>
+          <h2>What would you like to name your aquarium?</h2>
+          <p>Choose a memorable name that reflects its character</p>
+          
+          <div class="input-group">
+            <label for="aquarium-name">Aquarium Name</label>
+            <input
+              id="aquarium-name"
+              type="text"
+              formControlName="name"
+              placeholder="e.g., Community Tank, Reef Paradise, Goldfish Haven..."
+              [class.invalid]="aquariumForm.get('name')?.invalid && aquariumForm.get('name')?.touched"
+            >
+            <div class="input-feedback" *ngIf="aquariumForm.get('name')?.invalid && aquariumForm.get('name')?.touched">
+              <span *ngIf="aquariumForm.get('name')?.errors?.['required']">Please enter a name for your aquarium</span>
+              <span *ngIf="aquariumForm.get('name')?.errors?.['minlength']">Name must be at least 2 characters long</span>
+              <span *ngIf="aquariumForm.get('name')?.errors?.['maxlength']">Name must be less than 50 characters</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Aquarium Type -->
+      <div class="form-step" *ngIf="currentStep === 2">
+        <div class="step-content">
+          <div class="step-icon">🌊</div>
+          <h2>What type of aquarium are you setting up?</h2>
+          <p>Each type has different requirements and inhabitants</p>
+          
+          <div class="type-grid">
+            <div 
+              *ngFor="let type of aquariumTypes"
+              class="type-card"
+              [class.selected]="aquariumForm.get('type')?.value === type.value"
+              (click)="selectType(type.value)"
+            >
+              <div class="type-emoji">{{ type.emoji }}</div>
+              <h3>{{ type.label }}</h3>
+              <p>{{ type.description }}</p>
+              <div class="type-indicator"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Capacity -->
+      <div class="form-step" *ngIf="currentStep === 3">
+        <div class="step-content">
+          <div class="step-icon">📏</div>
+          <h2>How large is your aquarium?</h2>
+          <p>This helps us set appropriate parameter ranges</p>
+          
+          <div class="capacity-section">
+            <div class="capacity-grid">
+              <button 
+                *ngFor="let capacity of commonCapacities"
+                type="button"
+                class="capacity-option"
+                [class.selected]="aquariumForm.get('capacity')?.value == capacity"
+                (click)="selectCapacity(capacity)"
+              >
+                {{ capacity }}L
+              </button>
+            </div>
+            
+            <div class="custom-capacity">
+              <label for="custom-capacity">Or enter a custom size:</label>
+              <div class="capacity-input-group">
+                <input
+                  id="custom-capacity"
+                  type="number"
+                  formControlName="capacity"
+                  placeholder="Enter liters"
+                  min="1"
+                  max="10000"
+                >
+                <span class="capacity-unit">Liters</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Optional Notes -->
+          <div class="input-group notes-section">
+            <label for="aquarium-notes">Additional Notes (Optional)</label>
+            <textarea
+              id="aquarium-notes"
+              formControlName="notes"
+              placeholder="Any special features, equipment, or plans for this aquarium..."
+              rows="3"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="form-navigation">
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          *ngIf="currentStep > 1"
+          (click)="previousStep()"
+        >
+          Previous
+        </button>
+        
+        <div class="nav-spacer"></div>
+        
+        <button 
+          type="button" 
+          class="btn btn-primary" 
+          *ngIf="currentStep < totalSteps"
+          [disabled]="!canProceed()"
+          (click)="nextStep()"
+        >
+          Next Step
+        </button>
+        
+        <button 
+          type="submit" 
+          class="btn btn-primary btn-create" 
+          *ngIf="currentStep === totalSteps"
+          [disabled]="!aquariumForm.valid || isSubmitting"
+        >
+          <span *ngIf="!isSubmitting">🎯 Create Aquarium</span>
+          <span *ngIf="isSubmitting" class="loading-state">
+            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" opacity="0.3"/>
+              <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+            Creating...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
