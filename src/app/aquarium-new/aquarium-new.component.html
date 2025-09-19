@@ -34,14 +34,14 @@
       </div>
       <div class="step-indicators">
         <div 
-          *ngFor="let step of [1, 2, 3]; index as i" 
+          *ngFor="let step of [1, 2, 3, 4]; index as i" 
           class="step-indicator"
           [class.active]="currentStep === step"
           [class.completed]="currentStep > step"
         >
           <span class="step-number">{{ step }}</span>
           <span class="step-label">
-            {{ step === 1 ? 'Name' : step === 2 ? 'Type' : 'Capacity' }}
+            {{ step === 1 ? 'Name' : step === 2 ? 'Type' : step === 3 ? 'Capacity' : 'Inhabitants' }}
           </span>
         </div>
       </div>
@@ -145,6 +145,224 @@
               placeholder="Any special features, equipment, or plans for this aquarium..."
               rows="3"
             ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Inhabitants (Optional) -->
+      <div class="form-step" *ngIf="currentStep === 4">
+        <div class="step-content">
+          <div class="step-icon">🐠</div>
+          <h2>Add Inhabitants (Optional)</h2>
+          <p>Add any fish, plants, or other creatures you plan to keep</p>
+          
+          <div class="inhabitants-section">
+            <!-- Current Inhabitants List -->
+            <div class="inhabitants-list" *ngIf="inhabitants.length > 0">
+              <div 
+                *ngFor="let inhabitant of inhabitants.controls; let i = index" 
+                class="inhabitant-item"
+                [formGroup]="$any(inhabitant)"
+              >
+                <div class="inhabitant-header">
+                  <h4>Inhabitant {{ i + 1 }}</h4>
+                  <button 
+                    type="button" 
+                    class="btn-remove" 
+                    (click)="removeInhabitant(i)"
+                    title="Remove inhabitant"
+                  >
+                    ×
+                  </button>
+                </div>
+                
+                <div class="inhabitant-form">
+                  <div class="form-row">
+                    <div class="input-group">
+                      <label [for]="'inhabitant-name-' + i">Name *</label>
+                      <input
+                        [id]="'inhabitant-name-' + i"
+                        type="text"
+                        formControlName="name"
+                        placeholder="e.g., Neon Tetras, Java Fern"
+                        [class.invalid]="inhabitant.get('name')?.invalid && inhabitant.get('name')?.touched"
+                      >
+                      <div class="input-feedback" *ngIf="inhabitant.get('name')?.invalid && inhabitant.get('name')?.touched">
+                        <span *ngIf="inhabitant.get('name')?.errors?.['required']">Name is required</span>
+                      </div>
+                    </div>
+                    
+                    <div class="input-group">
+                      <label [for]="'inhabitant-species-' + i">Species *</label>
+                      <input
+                        [id]="'inhabitant-species-' + i"
+                        type="text"
+                        formControlName="species"
+                        placeholder="e.g., Paracheirodon innesi"
+                        [class.invalid]="inhabitant.get('species')?.invalid && inhabitant.get('species')?.touched"
+                      >
+                      <div class="input-feedback" *ngIf="inhabitant.get('species')?.invalid && inhabitant.get('species')?.touched">
+                        <span *ngIf="inhabitant.get('species')?.errors?.['required']">Species is required</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="form-row">
+                    <div class="input-group type-group">
+                      <label>Type *</label>
+                      <div class="type-options">
+                        <button
+                          *ngFor="let type of inhabitantTypes"
+                          type="button"
+                          class="type-option"
+                          [class.selected]="inhabitant.get('type')?.value === type.value"
+                          (click)="inhabitant.get('type')?.setValue(type.value)"
+                        >
+                          <span class="type-emoji">{{ type.emoji }}</span>
+                          {{ type.label }}
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div class="input-group quantity-group">
+                      <label [for]="'inhabitant-quantity-' + i">Quantity *</label>
+                      <input
+                        [id]="'inhabitant-quantity-' + i"
+                        type="number"
+                        formControlName="quantity"
+                        min="1"
+                        max="1000"
+                        [class.invalid]="inhabitant.get('quantity')?.invalid && inhabitant.get('quantity')?.touched"
+                      >
+                      <div class="input-feedback" *ngIf="inhabitant.get('quantity')?.invalid && inhabitant.get('quantity')?.touched">
+                        <span *ngIf="inhabitant.get('quantity')?.errors?.['required']">Quantity is required</span>
+                        <span *ngIf="inhabitant.get('quantity')?.errors?.['min']">Minimum quantity is 1</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="input-group">
+                    <label [for]="'inhabitant-notes-' + i">Notes (Optional)</label>
+                    <textarea
+                      [id]="'inhabitant-notes-' + i"
+                      formControlName="notes"
+                      placeholder="Special care notes, behavior, etc..."
+                      rows="2"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Add Inhabitant Section -->
+            <div class="add-inhabitant-section">
+              <!-- Mode Selection -->
+              <div class="mode-selection">
+                <h4>{{ inhabitants.length === 0 ? 'Add Your First Inhabitant' : 'Add Another Inhabitant' }}</h4>
+                <div class="mode-buttons">
+                  <button 
+                    type="button"
+                    class="mode-btn"
+                    [class.active]="addMode === 'library'"
+                    (click)="setAddMode('library')"
+                  >
+                    📚 From Library
+                  </button>
+                  <button 
+                    type="button"
+                    class="mode-btn"
+                    [class.active]="addMode === 'custom'"
+                    (click)="setAddMode('custom')"
+                  >
+                    ✏️ Custom Entry
+                  </button>
+                </div>
+              </div>
+
+              <!-- Library Mode -->
+              <div class="library-mode" *ngIf="addMode === 'library'">
+                <!-- Filters -->
+                <div class="library-filters">
+                  <div class="filter-row">
+                    <div class="search-box">
+                      <input
+                        type="text"
+                        placeholder="Search by name, species, or notes..."
+                        [value]="libraryFilter"
+                        (input)="onSearchChange($event)"
+                        class="search-input"
+                      >
+                    </div>
+                    <select 
+                      [value]="selectedLibraryType"
+                      (change)="onTypeFilterChange($event)"
+                      class="type-filter"
+                    >
+                      <option value="">All Types</option>
+                      <option *ngFor="let type of inhabitantTypes" [value]="type.value">
+                        {{ type.emoji }} {{ type.label }}
+                      </option>
+                    </select>
+                    <button 
+                      type="button" 
+                      class="clear-filters-btn"
+                      (click)="clearLibraryFilters()"
+                      *ngIf="libraryFilter || selectedLibraryType"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Library Grid -->
+                <div class="library-grid" *ngIf="filteredLibrary.length > 0">
+                  <div 
+                    *ngFor="let item of filteredLibrary"
+                    class="library-item"
+                    (click)="addInhabitantFromLibrary(item)"
+                  >
+                    <div class="item-header">
+                      <span class="item-emoji">{{ getInhabitantEmoji(item.type) }}</span>
+                      <span class="item-name">{{ item.name }}</span>
+                    </div>
+                    <div class="item-species">{{ item.species }}</div>
+                    <div class="item-notes">{{ item.notes }}</div>
+                    <div class="add-overlay">
+                      <span class="add-text">Click to Add</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- No Results -->
+                <div class="no-results" *ngIf="filteredLibrary.length === 0">
+                  <p>No inhabitants found matching your criteria.</p>
+                  <button 
+                    type="button" 
+                    class="btn btn-secondary"
+                    (click)="clearLibraryFilters()"
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+              </div>
+
+              <!-- Custom Mode -->
+              <div class="custom-mode" *ngIf="addMode === 'custom'">
+                <button 
+                  type="button" 
+                  class="btn btn-secondary btn-add-custom"
+                  (click)="addInhabitant()"
+                >
+                  <span class="add-icon">+</span>
+                  Add Custom Inhabitant
+                </button>
+              </div>
+            </div>
+            
+            <!-- Skip Message -->
+            <div class="skip-message" *ngIf="inhabitants.length === 0">
+              <p>💡 Don't worry - you can always add inhabitants later from the aquarium details page.</p>
+            </div>
           </div>
         </div>
       </div>
